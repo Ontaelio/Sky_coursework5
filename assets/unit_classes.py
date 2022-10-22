@@ -4,10 +4,6 @@ from typing import Callable
 import assets.skills
 
 
-def foo(n):
-    return n * n
-
-
 @dataclass(frozen=True)
 class UnitClass:
     name: str
@@ -17,6 +13,7 @@ class UnitClass:
     stamina_mod: float
     armor_mod: float
     skill: Callable
+    skill_uses: int
 
 
 WARRIOR = UnitClass(
@@ -26,9 +23,9 @@ WARRIOR = UnitClass(
     attack_mod=0.8,
     stamina_mod=0.9,
     armor_mod=1.2,
-    skill=assets.skills.ferocious_kick
+    skill=assets.skills.ferocious_kick,
+    skill_uses=1
 )
-
 
 THIEF = UnitClass(
     name='Вор',
@@ -37,20 +34,20 @@ THIEF = UnitClass(
     attack_mod=0.8,
     stamina_mod=0.9,
     armor_mod=1.2,
-    skill=assets.skills.mighty_jab
+    skill=assets.skills.mighty_jab,
+    skill_uses=1
 )
 
 HEALER = UnitClass(
     name='Лекарь',
     max_health=40.0,
     max_stamina=25.0,
-    attack_mod=0.6,
+    attack_mod=0.5,
     stamina_mod=1.8,
     armor_mod=1.0,
-    skill=assets.skills.greedy_healer
+    skill=assets.skills.greedy_healer,
+    skill_uses=3
 )
-
-
 
 # here be tests
 

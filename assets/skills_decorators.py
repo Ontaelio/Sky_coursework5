@@ -9,54 +9,43 @@ def skill_name(name: str) -> Callable:
 
     def inner_dec(func: Callable):
         func.name = skill_name.name
-        # print('Wrapped with name:', skill_name.name)
-
-        # @wraps(func)
-        # def _wrapper(*args, **kwargs):
         return func
 
-        # return _wrapper
-
     return inner_dec
 
 
-def max_uses(times: int) -> Callable:
-    max_uses.counter = times
+def check_if_used(func) -> Callable:
+    @wraps(func)
+    def _wrapper(battle):
+        if battle.active_unit.skill_uses == 0:
+            raise SkillUsedUp
 
-    def inner_dec(func: Callable):
-        @wraps(func)
-        def _wrapper(*args, **kwargs):
-            if max_uses.counter == 0:
-                raise SkillUsedUp
+        battle.active_unit.skill_uses -= 1
+        return func(battle)
 
-            max_uses.counter -= 1
-            # print('skill used')
-            return func(*args, **kwargs)
-
-        return _wrapper
-
-    return inner_dec
+    return _wrapper
 
 
 def required_stamina(stamina: float) -> Callable:
     required_stamina.value = stamina
 
     def inner_dec(func: Callable):
+        func.required_stamina = required_stamina.value
+
         @wraps(func)
         def _wrapper(battle):
-            if battle.active_unit.stamina < required_stamina.value:
-                raise NotEnoughStamina
-
+            battle.active_unit.change_stamina(- func.required_stamina)
             return func(battle)
 
         return _wrapper
 
     return inner_dec
 
+
 # vampire
 # football player
 
-@max_uses(8)
+@check_if_used
 @required_stamina(1)
 def foo(n):
     foo.name = "Me foo"

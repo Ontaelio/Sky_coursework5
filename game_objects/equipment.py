@@ -49,6 +49,28 @@ class EquipmentList:
         self.weapons = list(WeaponSchema().load(w) for w in data["weapons"])
         self.armors = list(ArmorSchema().load(a) for a in data["armors"])
 
+    def weapon(self, name: str) -> Weapon:
+        return next((w for w in self.weapons if w.name == name), NO_WEAPON)
+
+    def armor(self, name: str) -> Armor:
+        return next((ar for ar in self.armors if ar.name == name), NO_ARMOR)
+
+
+NO_ARMOR = Armor(
+    idn=9999,
+    name='Пустота',
+    defence=0,
+    stamina_per_turn=0
+)
+
+NO_WEAPON = Weapon(
+    idn=9999,
+    name='Ничто',
+    min_damage=0,
+    max_damage=0.2,
+    stamina_per_hit=0
+)
+
 
 # here be tests
 
@@ -57,6 +79,7 @@ if __name__ == '__main__':
     a.get_data("../data/equipment.json")
     print(a.weapons)
     print(a.armors)
+    print(a.weapon('топорик'))
 
 
 

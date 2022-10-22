@@ -1,5 +1,9 @@
 class SkillUsedUp(Exception):
-    message = 'Запас использований навыка исчерпан'
+    message = 'Запас использований навыка исчерпан.'
+
+
+class SomethingWentWrong(Exception):
+    pass
 
 
 class NotEnoughStamina(Exception):
@@ -7,4 +11,8 @@ class NotEnoughStamina(Exception):
 
 
 class PlayerDies(Exception):
-    message = 'Здоровье кончилось'
+    message = 'Здоровье кончилось.'
+
+
+class AttackBlocked(Exception):
+    message = 'Броня справилась с атакой.'

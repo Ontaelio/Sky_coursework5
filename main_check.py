@@ -1,85 +1,60 @@
+from exceptions import SomethingWentWrong
 from game_objects.arena import Arena
 from game_objects.battle import Battle
 from game_objects.equipment import EquipmentList
+from game_objects.ai import AI
+from game_objects.game import GamePlayerVsAI
+from game_objects.stats import get_verbose_stats
 
-from game_objects.units import PlayerHero, RobotHero
-from assets.unit_classes import WARRIOR, THIEF
+from game_objects.units import BaseHero
+from assets.unit_classes import WARRIOR, THIEF, HEALER
 
-if __name__ == '__main__':
-    Johon = PlayerHero('Johon', WARRIOR)
-    Buhach = RobotHero('Buhach', THIEF)
+
+def main():
+    Johon = BaseHero('Johon', THIEF)
+    Buhach = BaseHero('Buhach', WARRIOR)
     print(Johon)
-    #a = Johon.skill(9)
-
-    arena = Arena()
-    battle = Battle(arena, Johon, Buhach)
-
-    print(Buhach.health)
-    print(Johon.use_skill(battle))
-    print(Buhach.health)
-    print(Johon.use_skill(battle))
-    print(Johon.stamina)
-    Johon.change_stamina(-10)
-    print(Johon.stamina)
-    Johon.change_stamina(25)
-    print(Johon.stamina)
 
     equipment = EquipmentList()
     equipment.get_data("./data/equipment.json")
-    Johon.weapon = equipment.weapons[0]
-    Johon.armor = equipment.armors[2]
-    Buhach.armor = equipment.armors[1]
-    Buhach.weapon = equipment.weapons[1]
+
+    # Johon.equip(weapon=equipment.weapon('топорик'), armor=equipment.armor('панцирь'))
+    # Buhach.equip(weapon=equipment.weapon('ножик'))
+
     print(Johon.weapon.name)
 
-    print(Johon.damage)
-    print(Johon.damage)
-    print(Johon.damage)
-    print(Johon.damage)
+    arena = Arena()
+    epic = GamePlayerVsAI(arena, Johon, Buhach)
+    epic.game_start(
+        equipment=equipment,
+        player_weapon='топорик',
+        player_armor='панцирь',
+        enemy_weapon='ножик',
+        enemy_armor='кожаная броня'
+    )
 
-    print(battle.attack())
-    battle.swap_units()
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
+    print(epic.get_full_description())
 
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
+    # epic = GamePlayerVsAI(battle)
+    print(epic.make_turn('skill'))
+    print(Buhach.health)
+    # print(Johon.role.skill.max_uses)
+    print(epic.make_turn('skill'))
+    print(Buhach.health)
+    while not epic.battle.someone_died:
+        print(epic.make_turn('attack'))
+        # print(Johon.stamina, Buhach.stamina)
+    print(Johon.health, Buhach.health)
 
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
+    print(get_verbose_stats(Johon))
+    print(epic.get_full_description())
 
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
+def check_verbose():
+    ...
 
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
-    print(battle.attack())
 
-    print(battle.someone_died)
-    try:
-        Buhach.change_health(-100)
-    except:
-        pass
-
-    print(battle.someone_died)
+if __name__ == '__main__':
+    main()
 
 
 
