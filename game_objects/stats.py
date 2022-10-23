@@ -15,6 +15,6 @@ def get_verbose_stats(unit: BaseHero) -> dict:
 def get_unit_stats(unit: BaseHero) -> dict:
     return {
         "name": unit.name,
-        "health": unit.health,
-        "stamina": unit.stamina
+        "health": round(unit.health, 1),
+        "stamina": round(unit.stamina, 1)
     }

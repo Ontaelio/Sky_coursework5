@@ -1,3 +1,5 @@
+from random import randrange
+
 from exceptions import SomethingWentWrong
 from game_objects.ai import AI
 from game_objects.battle import Battle
@@ -8,10 +10,16 @@ from game_objects.stats import get_verbose_stats, get_unit_stats
 
 class GamePlayerVsAI:
 
+    game_counter = 0
+
     def __init__(self, arena: Arena, player: BaseHero, robot: BaseHero):
         self.player = player
         self.enemy = robot
         self.battle = Battle(arena, player, robot)
+        self.active = False
+        self.game_id = self.game_counter
+        self.game_password = randrange(99999)
+        GamePlayerVsAI.game_counter += 1
 
     def game_start(self, *args, **kwargs) -> str:
         """
@@ -32,6 +40,7 @@ class GamePlayerVsAI:
             if enemy_armor := kwargs.get('enemy_armor', None):
                 self.enemy.equip(armor=equipment_list.armor(enemy_armor))
 
+        self.active = True
         return "Бой начался!"
 
     def make_turn(self, action: str) -> str:
@@ -54,6 +63,11 @@ class GamePlayerVsAI:
 
         return ' '.join(result)
 
+    def check_status(self):
+        if self.battle.someone_died:
+            return 'game over'
+        return 'game on'
+
     def get_player_stats(self) -> dict:
         return get_unit_stats(self.player)
 
@@ -65,4 +79,5 @@ class GamePlayerVsAI:
                 "enemy": get_verbose_stats(self.enemy)}
 
     def game_end(self) -> str:
+        self.active = False
         return "Бой окончен!"

@@ -2,6 +2,7 @@ from typing import Optional
 
 from assets.unit_classes import UnitClass
 from game_objects.equipment import Weapon, Armor, NO_ARMOR, NO_WEAPON
+from assets.unit_classes import ROLES
 from exceptions import SkillUsedUp, NotEnoughStamina, PlayerDies, AttackBlocked
 
 
@@ -84,6 +85,10 @@ class BaseHero:
             return e.message
         except NotEnoughStamina:
             return f'{self.name} пытается использовать {self.role.skill.name}, но не хватает выносливости.'
+
+
+def create_unit(name: str, role: str) -> BaseHero:
+    return BaseHero(name, ROLES[role])
 
 
 # class PlayerHero(BaseHero):
