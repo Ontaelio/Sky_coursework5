@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 
+from assets.unit_classes import ROLES
 from game_objects.equipment import EquipmentList
 from game_objects.game import GamePlayerVsAI
 from game_objects.units import create_unit
 from game_objects.arena import Arena
+from loggers import api_logger
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -40,6 +42,7 @@ def start_game():
         enemy_armor=data["enemy_armor"]
     )
     games[game.game_id] = game
+    api_logger.info(f"Запущена игра {game.game_id}: {response}")
     return jsonify({"game_id": game.game_id,
                     "pass": game.game_password,
                     "text": response,
@@ -51,7 +54,7 @@ def make_turn():
     """
     expects:
     "game_id": int
-    "command": str (attack, skill, pass)
+    "action": str (attack, skill, pass)
     """
     global games
     game_id = int(request.args.get('game_id'))
@@ -65,6 +68,7 @@ def make_turn():
             "player": game.get_player_stats(),
             "enemy": game.get_enemy_stats()
         }
+        api_logger.info(f"Игра {game_id}: {response['text']}")
         return jsonify(response)
     return 'game over', 400
 
@@ -73,6 +77,14 @@ def make_turn():
 def get_game_info(game_id):
     try:
         return jsonify(games[game_id].get_full_description())
+    except KeyError:
+        return 'Такой игры нет', 404
+
+
+@app.route('/gamestats/<int:game_id>', methods=['GET'])
+def get_game_stats(game_id):
+    try:
+        return jsonify(games[game_id].get_stats())
     except KeyError:
         return 'Такой игры нет', 404
 
@@ -89,6 +101,7 @@ def delete_game():
         return 'Bad password', 400
     response = game.game_end()
     games.pop(game_id)
+    api_logger.info(f"Игра {game_id} завершена: {response}")
     return response
 
 
@@ -101,6 +114,14 @@ def get_equipment_list():
     equipment.get_data("./data/equipment.json")
     return {'weapons': [w.name for w in equipment.weapons],
             'armors': [a.name for a in equipment.armors]}
+
+
+@app.route('/roles', methods=['GET'])
+def get_roles():
+    """
+    Get all currently available character classes
+    """
+    return {"roles": [r.name for r in ROLES.values()]}
 
 
 if __name__ == '__main__':

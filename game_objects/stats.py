@@ -18,3 +18,19 @@ def get_unit_stats(unit: BaseHero) -> dict:
         "health": round(unit.health, 1),
         "stamina": round(unit.stamina, 1)
     }
+
+
+def get_unit_stats_full(unit: BaseHero) -> dict:
+    return {
+        "name": unit.name,
+        "class": unit.role.name,
+        "health": round(unit.health, 1),
+        "max_health": unit.role.max_health,
+        "stamina": round(unit.stamina, 1),
+        "max_stamina": unit.role.max_stamina,
+        "weapon": unit.weapon.name,
+        "weapon_min": unit.weapon.min_damage,
+        "weapon_max": unit.weapon.max_damage,
+        "armor": unit.armor.name,
+        "defence": unit.armor.defence,
+    }

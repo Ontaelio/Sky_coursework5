@@ -48,6 +48,39 @@ ROLES = {
         armor_mod=1.0,
         skill=assets.skills.greedy_healer,
         skill_uses=3
+    ),
+
+    "Футболист": UnitClass(
+        name="Футболист",
+        max_health=25.0,
+        max_stamina=60.0,
+        attack_mod=1.2,
+        stamina_mod=4.1,
+        armor_mod=0.1,
+        skill=assets.skills.penalty_kick,
+        skill_uses=9999
+    ),
+
+    "Вампир": UnitClass(
+        name="Вампир",
+        max_health=25.0,
+        max_stamina=100.0,
+        attack_mod=0.8,
+        stamina_mod=1.1,
+        armor_mod=1.5,
+        skill=assets.skills.vampire_bite,
+        skill_uses=9999
+    ),
+
+    "Волшебник": UnitClass(
+        name="Волшебник",
+        max_health=25.0,
+        max_stamina=30.0,
+        attack_mod=0.4,
+        stamina_mod=7.1,
+        armor_mod=1.5,
+        skill=assets.skills.magic_spell,
+        skill_uses=9999
     )
 }
 

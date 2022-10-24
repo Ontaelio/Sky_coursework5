@@ -5,7 +5,7 @@ from game_objects.ai import AI
 from game_objects.battle import Battle
 from game_objects.units import BaseHero
 from game_objects.arena import Arena
-from game_objects.stats import get_verbose_stats, get_unit_stats
+from game_objects.stats import get_verbose_stats, get_unit_stats, get_unit_stats_full
 
 
 class GamePlayerVsAI:
@@ -77,6 +77,10 @@ class GamePlayerVsAI:
     def get_full_description(self) -> dict:
         return {"player": get_verbose_stats(self.player),
                 "enemy": get_verbose_stats(self.enemy)}
+
+    def get_stats(self) -> dict:
+        return {"player": get_unit_stats_full(self.player),
+                "enemy": get_unit_stats_full(self.enemy)}
 
     def game_end(self) -> str:
         self.active = False

@@ -10,6 +10,7 @@ class BaseHero:
     def __init__(self, name: str, unit_class: UnitClass):
         self.name: str = name
         self.role: UnitClass = unit_class
+        self.unit_class: UnitClass = self.role
         self.skill_uses = self.role.skill_uses
         self._health: float = unit_class.max_health
         self._stamina: float = unit_class.max_stamina

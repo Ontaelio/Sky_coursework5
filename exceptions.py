@@ -10,6 +10,10 @@ class NotEnoughStamina(Exception):
     message = 'Недостаточно выносливости.'
 
 
+class WrongEquipment(Exception):
+    message = 'Неправильная экипировка'
+
+
 class PlayerDies(Exception):
     message = 'Здоровье кончилось.'
 

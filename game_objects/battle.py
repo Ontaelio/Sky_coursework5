@@ -4,7 +4,7 @@
 # import game_objects.arena
 # import game_objects.units
 
-from exceptions import SkillUsedUp, NotEnoughStamina, PlayerDies, AttackBlocked, SomethingWentWrong
+from exceptions import SkillUsedUp, NotEnoughStamina, PlayerDies, AttackBlocked, SomethingWentWrong, WrongEquipment
 
 
 class Battle:
@@ -29,9 +29,9 @@ class Battle:
             return string
 
         if self.active_unit.health > 0:
-            return string + f" {self.active_unit.name} выиграл битву!"
+            return string + f" {self.active_unit.name} побеждает!"
         if self.target_unit.health > 0:
-            return string + f" {self.target_unit.name} выиграл битву!"
+            return string + f" {self.target_unit.name} побеждает!"
         return string + " Оба героя погибают, ничья!"
 
     def restore_stamina(self):
@@ -54,7 +54,7 @@ class Battle:
         try:
             self.target_unit.change_health(-damage)
         except PlayerDies:
-            result += f" {self.active_unit.name} выиграл битву!"
+            result += f" {self.active_unit.name} побеждает!"
 
         return result
 
@@ -63,6 +63,10 @@ class Battle:
             result = self.active_unit.role.skill(self, *args, **kwargs)
         except SkillUsedUp as e:
             raise SomethingWentWrong(e.message)
+        except WrongEquipment:
+            raise SomethingWentWrong(
+                f"{self.active_unit.name} пытается использовать навык {self.active_unit.role.skill.name}, " \
+                f"но экипировка не позволяет это сделать.")
         except NotEnoughStamina:
             self.active_unit.skill_uses += 1
             raise SomethingWentWrong(f"{self.active_unit.name} пытается использовать навык {self.active_unit.role.skill.name}, " \
