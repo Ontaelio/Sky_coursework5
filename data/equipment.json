@@ -20,7 +20,22 @@
   "max_damage": 1,
   "min_damage": 0.5,
   "stamina_per_hit": 1
+  },
+  {
+    "id": 4,
+    "name": "футбольный мяч",
+    "max_damage": 0.2,
+    "min_damage": 0.1,
+    "stamina_per_hit": 1
+  },
+  {
+    "id": 5,
+    "name": "посох",
+    "max_damage": 1.5,
+    "min_damage": 1.0,
+    "stamina_per_hit": 2
   }
+
 ],
   "armors": [
   {
@@ -40,6 +55,12 @@
     "name": "панцирь",
     "defence": 2.0,
     "stamina_per_turn": 1.6
+    },
+    {
+    "id": 4,
+    "name": "мантия",
+    "defence": 1.0,
+    "stamina_per_turn": 1.0
     }
   ]
 }
